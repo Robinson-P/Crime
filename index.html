@@ -1,0 +1,84 @@
+>
+    <head>
+        <title>Chicago Crime</title>
+
+        <link rel="stylesheet" href="https://unpkg.com/leaflet@1.3.4/dist/leaflet.css"
+        integrity="sha512-puBpdR0798OZvTTbP4A8Ix/l+A4dHDD0DGqYW6RQ+9jxkRFclaxxQb/SJAWZfWAkuyeQUytO7+7N4QKrDh+drA=="
+        crossorigin=""/>
+
+        <script src="https://unpkg.com/leaflet@1.3.4/dist/leaflet.js"
+        integrity="sha512-nMMmRyTVoLYqjP9hrbed9S+FzjZHW5gY1TWCHA5ckwXZBadntCNs8kEqAWdrb9O7rxbCaA4lKTIWjDXZxflOcA=="
+        crossorigin=""></script>
+
+		<script src="Crime.js"></script>
+
+        <style type="text/css">
+            /* Style of the Legend: adjust the values below to change the appearance of the legend pane*/
+            .title {
+                padding: 6px 8px;
+                line-height: 18px;
+                background: rgba(255,255,255,0.9);
+                box-shadow: 0 0 15px rgba(0,0,0,0.2);
+                border-radius: 5px;
+            }
+
+            /* Adjust the values below to change the appearance of the legend color boxes */
+            .title i {
+                width: 18px;
+                height: 18px;
+                float: left;
+                margin-right: 8px;
+                opacity: 0.7;
+            }
+        </style>
+		<style type="text/css">
+  html, body { margin: 0; padding: 0; height: 100%; }
+  #map { min-height: 100%; }
+</style>
+
+   </head>
+
+    <body>
+        <div id="map"></div>
+		     
+        <script type="text/javascript">
+
+            var map = L.map('map', {
+              center: [41.881832, -87.623177],
+              zoom: 10
+            });
+
+            L.tileLayer('http://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+               attribution: '@ <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+            }).addTo(map);
+			
+			function getColor(value) {
+  return value < 45 ? '#feedde':
+         value < 109 ? '#fdd0a2':
+         value < 199 ? '#fdae6b':
+         value < 325 ? '#fd8d3c':
+         value < 621 ? '#e6550d':
+                       '#a63603';}
+
+function style(feature){
+  return {
+  fillColor: getColor(feature.properties.NumPoints),
+      weight: 2,
+      opacity: 1,
+      color: 'black',
+      fillOpacity: 1
+                    };
+                        }
+						L.geoJson(Chicrime, {style:style}).addTo(map);
+						var title = L.control({position: 'topright'});
+
+title.onAdd = function (map) {
+  this._div = L.DomUtil.create('div', 'title');
+  this._div.innerHTML = "<h3>Hexbin Mapping</h3>";
+  return this._div;
+};
+
+title.addTo(map);
+ </script>
+   </body>
+</html>
